@@ -6,7 +6,7 @@ public class SettingInstanceFirebase {
 
     private static FirebaseAuth authFirebase;
 
-    public static FirebaseAuth firebaseAuthMethod(){
+    public static FirebaseAuth getInstanceFirebaseAuthMethod(){
 
         if(authFirebase == null){
             authFirebase = FirebaseAuth.getInstance();
