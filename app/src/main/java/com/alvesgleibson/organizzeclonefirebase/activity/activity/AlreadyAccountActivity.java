@@ -35,7 +35,10 @@ public class AlreadyAccountActivity extends AppCompatActivity {
 
     public void loginFirebase(View view){
 
-        fieldEmptyAndLogin( etEmailLogin.getText().toString(), etPasswordLogin.getText().toString());
+        String emailPar, passwordPar;
+        emailPar = etEmailLogin.getText().toString();
+        passwordPar =  etPasswordLogin.getText().toString();
+        fieldEmptyAndLogin( emailPar,passwordPar );
 
     }
 

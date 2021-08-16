@@ -50,4 +50,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-auth'
 
+    //FAB Lib
+    implementation 'com.github.clans:fab:1.6.4'
+
 }

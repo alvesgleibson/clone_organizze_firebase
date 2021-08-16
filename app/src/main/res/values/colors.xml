@@ -7,4 +7,26 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+
+    <!-- Expense Colors!-->
+
+    <color name="colorPrimaryExpense">#FF706A</color>
+    <color name="colorPrimaryDarkExpense">#E66560</color>
+    <color name="colorAccentExpense">#FF706A</color>
+
+    <!-- Income Colors!-->
+
+    <color name="colorPrimaryIncome">#00D39E</color>
+    <color name="colorPrimaryDarkIncome">#00BE8B</color>
+    <color name="colorAccentIncome">#00D39E</color>
+
+    <!-- App Colors -->
+
+    <color name="colorPrimaryFabNormal">#DA4336</color>
+    <color name="colorPrimaryFabPressed">#E75043</color>
+
+
+
 </resources>

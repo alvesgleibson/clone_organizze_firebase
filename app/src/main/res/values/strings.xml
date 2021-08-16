@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">OrganizzeCloneFirebase</string>
-    <string name="description_main_screen">Create a free account</string>
-    <string name="description_main_screen_2">Join over a million people</string>
-    <string name="register_main_login_button">Register</string>
-    <string name="description_main_screen_3">I already have an account.</string>
+    <string name="description_main_screen">Crie uma conta grátis</string>
+    <string name="description_main_screen_2">Junte a milhoes de Pessoas</string>
+    <string name="register_main_login_button">Cadastrar</string>
+    <string name="description_main_screen_3">Já tenho uma Conta.</string>
+    <string name="expense_name">Despesas</string>
+    <string name="income_name">Receitas</string>
 </resources>
