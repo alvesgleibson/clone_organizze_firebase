@@ -1,4 +1,4 @@
-package com.alvesgleibson.organizzeclonefirebase.activity.activity;
+package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
 
-public class IncomeActivity extends AppCompatActivity {
+public class ExpenseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_income);
+        setContentView(R.layout.activity_expense);
     }
 }

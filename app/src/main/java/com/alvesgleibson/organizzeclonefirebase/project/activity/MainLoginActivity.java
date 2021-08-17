@@ -1,11 +1,10 @@
-package com.alvesgleibson.organizzeclonefirebase.activity.activity;
+package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
 

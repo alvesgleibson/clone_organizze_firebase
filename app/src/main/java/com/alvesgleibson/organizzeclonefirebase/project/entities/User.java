@@ -1,4 +1,4 @@
-package com.alvesgleibson.organizzeclonefirebase.activity.entities;
+package com.alvesgleibson.organizzeclonefirebase.project.entities;
 
 public class User {
 

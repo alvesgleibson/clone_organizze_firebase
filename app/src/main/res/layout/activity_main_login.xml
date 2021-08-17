@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".activity.activity.MainLoginActivity">
+    tools:context=".project.activity.MainLoginActivity">
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/floatingActionMenu"

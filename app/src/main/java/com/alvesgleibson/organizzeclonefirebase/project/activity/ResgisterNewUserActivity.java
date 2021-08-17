@@ -1,4 +1,4 @@
-package com.alvesgleibson.organizzeclonefirebase.activity.activity;
+package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
-import com.alvesgleibson.organizzeclonefirebase.activity.entities.User;
-import com.alvesgleibson.organizzeclonefirebase.activity.setting.SettingInstanceFirebase;
+import com.alvesgleibson.organizzeclonefirebase.project.entities.User;
+import com.alvesgleibson.organizzeclonefirebase.project.setting.SettingInstanceFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
 
 public class ResgisterNewUserActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.alvesgleibson.organizzeclonefirebase.activity.activity;
+package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
-import com.alvesgleibson.organizzeclonefirebase.activity.setting.SettingInstanceFirebase;
+import com.alvesgleibson.organizzeclonefirebase.project.setting.SettingInstanceFirebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
