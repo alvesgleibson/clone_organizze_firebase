@@ -1,4 +1,4 @@
-package com.alvesgleibson.organizzeclonefirebase.activity.activity;
+package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
-import com.alvesgleibson.organizzeclonefirebase.activity.setting.SettingInstanceFirebase;
+import com.alvesgleibson.organizzeclonefirebase.project.setting.SettingInstanceFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -35,7 +35,10 @@ public class AlreadyAccountActivity extends AppCompatActivity {
 
     public void loginFirebase(View view){
 
-        fieldEmptyAndLogin( etEmailLogin.getText().toString(), etPasswordLogin.getText().toString());
+        String emailPar, passwordPar;
+        emailPar = etEmailLogin.getText().toString();
+        passwordPar =  etPasswordLogin.getText().toString();
+        fieldEmptyAndLogin( emailPar,passwordPar );
 
     }
 

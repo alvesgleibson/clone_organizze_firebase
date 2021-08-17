@@ -1,4 +1,4 @@
-package com.alvesgleibson.organizzeclonefirebase.activity.setting;
+package com.alvesgleibson.organizzeclonefirebase.project.setting;
 
 import com.google.firebase.auth.FirebaseAuth;
 

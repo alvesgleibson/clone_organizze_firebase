@@ -10,16 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrganizzeCloneFirebase">
         <activity
-            android:name=".activity.activity.MainLoginActivity"
+            android:name=".project.activity.IncomeActivity"
+            android:exported="true"
+            android:theme="@style/IncomeTheme"
+            />
+        <activity
+            android:name=".project.activity.ExpenseActivity"
+            android:exported="true"
+            android:theme="@style/ExpenseTheme"
+            />
+        <activity
+            android:name=".project.activity.MainLoginActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.activity.AlreadyAccountActivity"
+            android:name=".project.activity.AlreadyAccountActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.activity.ResgisterNewUserActivity"
+            android:name=".project.activity.ResgisterNewUserActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.activity.MainActivity"
+            android:name=".project.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
