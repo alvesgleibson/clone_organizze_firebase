@@ -2,6 +2,7 @@ package com.alvesgleibson.organizzeclonefirebase.activity.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,11 +18,11 @@ public class MainLoginActivity extends AppCompatActivity {
     }
 
     public void addIncome(View view){
-        Toast.makeText(this, "Income", Toast.LENGTH_SHORT).show();
+        startActivity( new Intent(this, IncomeActivity.class));
 
     }
     public void addExpenses(View view){
-        Toast.makeText(this, "Expense", Toast.LENGTH_SHORT).show();
+        startActivity( new Intent(this, ExpenseActivity.class));
     }
 
 

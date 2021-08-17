@@ -10,6 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrganizzeCloneFirebase">
         <activity
+            android:name=".activity.activity.IncomeActivity"
+            android:exported="true"
+            android:theme="@style/IncomeTheme"
+            />
+        <activity
+            android:name=".activity.activity.ExpenseActivity"
+            android:exported="true"
+            android:theme="@style/ExpenseTheme"
+            />
+        <activity
             android:name=".activity.activity.MainLoginActivity"
             android:exported="true" />
         <activity

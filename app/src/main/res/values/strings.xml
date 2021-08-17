@@ -6,4 +6,8 @@
     <string name="description_main_screen_3">Já tenho uma Conta.</string>
     <string name="expense_name">Despesas</string>
     <string name="income_name">Receitas</string>
+    <string name="category_name">Categoria</string>
+    <string name="description_name">Descrição</string>
+    <string name="date_name">Data ex: 22/01/2021</string>
+    <string name="format_number">R$ 0,00</string>
 </resources>
