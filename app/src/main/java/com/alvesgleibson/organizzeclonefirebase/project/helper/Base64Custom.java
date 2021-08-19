@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 
 public class Base64Custom {
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String encodeBase64(String st) {
         return Base64.getEncoder().encodeToString(st.getBytes()).replaceAll("\\n|\\r", "");

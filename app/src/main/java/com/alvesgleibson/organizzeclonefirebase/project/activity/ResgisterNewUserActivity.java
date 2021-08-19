@@ -42,6 +42,8 @@ public class ResgisterNewUserActivity extends AppCompatActivity {
         password = findViewById(R.id.ettPersonPassword);
         buttonCreate = findViewById(R.id.btCreateAccount2);
 
+        getSupportActionBar().setTitle("Cadastro");
+
 
     }
 
