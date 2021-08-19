@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidPrograms/OrganizzeCloneFirebase/app/src/main/res/drawable/ic_save_alert_dialog_24.xml" value="0.3828125" />
         <entry key="..\:/AndroidPrograms/OrganizzeCloneFirebase/app/src/main/res/layout/activity_already_account.xml" value="0.3625" />
+        <entry key="..\:/AndroidPrograms/OrganizzeCloneFirebase/app/src/main/res/layout/activity_expense.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidPrograms/OrganizzeCloneFirebase/app/src/main/res/layout/activity_income.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidPrograms/OrganizzeCloneFirebase/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidPrograms/OrganizzeCloneFirebase/app/src/main/res/layout/activity_main_login.xml" value="0.36666666666666664" />
