@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
 import com.alvesgleibson.organizzeclonefirebase.project.entities.User;
@@ -25,10 +27,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainLoginActivity extends AppCompatActivity {
     private TextView viewText, txtBalance, txtName;
-    private String nameUser;
-    private Double numberAllUser;
     private DatabaseReference myDatabaseReference = SettingInstanceFirebase.getInstanceFirebaseDatabase();
     private FirebaseAuth myFirebaseAuth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -44,6 +45,34 @@ public class MainLoginActivity extends AppCompatActivity {
         viewText.setText(DateCustom.dateShowUser());
         showInformation();
 
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setElevation(0);
+
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.pag_init, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch ( item.getItemId() ){
+            case R.id.logoffB:{
+                myFirebaseAuth.signOut();
+                finish();
+            }
+        }
+
+
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void addIncome(View view){

@@ -23,7 +23,6 @@
         <activity
             android:name=".project.activity.MainLoginActivity"
             android:exported="true"
-            android:theme="@style/IncomeTheme"
             />
         <activity
             android:name=".project.activity.AlreadyAccountActivity"
