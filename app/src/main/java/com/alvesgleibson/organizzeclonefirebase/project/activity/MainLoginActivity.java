@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
 import com.alvesgleibson.organizzeclonefirebase.project.entities.User;
@@ -26,12 +25,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainLoginActivity extends AppCompatActivity {
-    private TextView viewText, txtBalance, txtName;
+    private TextView viewText, txtBalance, txtName, txtRenda, txtDespesa;
     private DatabaseReference myDatabaseReference = SettingInstanceFirebase.getInstanceFirebaseDatabase();
     private FirebaseAuth myFirebaseAuth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
+    private DatabaseReference referenceUserData;
+    private ValueEventListener valueEventListenerUser;
+
+    private Double rendaGeral = 0.0, despesaGeral = 0.0;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +41,13 @@ public class MainLoginActivity extends AppCompatActivity {
 
         viewText = findViewById(R.id.txtDataExibir);
         txtName = findViewById(R.id.txtNameUser);
-        txtBalance = findViewById(R.id.txtBalanceUser);
+        txtBalance = findViewById(R.id.txtRendaUser);
+        txtRenda = findViewById(R.id.txtRendaGeral);
+        txtDespesa = findViewById(R.id.txtDespesaUser);
 
         //Irá setar logo ao execultar o programa a data atual;
         viewText.setText(DateCustom.dateShowUser());
-        showInformation();
+
 
         getSupportActionBar().setTitle("");
         getSupportActionBar().setElevation(0);
@@ -51,6 +55,12 @@ public class MainLoginActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showInformation();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,6 +76,7 @@ public class MainLoginActivity extends AppCompatActivity {
             case R.id.logoffB:{
                 myFirebaseAuth.signOut();
                 finish();
+                break;
             }
         }
 
@@ -98,14 +109,24 @@ public class MainLoginActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void showInformation(){
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
-        DatabaseReference referenceUserData = myDatabaseReference.child("Users").child( emailId );
+        referenceUserData = myDatabaseReference.child("Users").child( emailId );
 
-        referenceUserData.addValueEventListener(new ValueEventListener() {
+       valueEventListenerUser =  referenceUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue( User.class );
+                Double amountAll, varDespesa, varRenda;
+                varDespesa = user.getExpenseAll();
+                varRenda = user.getIncomeAll();
+                amountAll = varRenda - varDespesa;
 
-                txtBalance.setText( "R$ "+user.getGolAll());
+
+                txtDespesa.setText( String.format("R$ -%.2f", varDespesa.doubleValue()) );
+                txtRenda.setText(String.format("R$ %.2f", varRenda.doubleValue()) );
+
+
+
+                txtBalance.setText( String.format("R$ %.2f",+amountAll));
                 txtName.setText( user.getName() );
             }
 
@@ -116,6 +137,10 @@ public class MainLoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
 
-
+        referenceUserData.removeEventListener( valueEventListenerUser );
+    }
 }

@@ -33,6 +33,9 @@ public class IncomeActivity extends AppCompatActivity {
     private FirebaseAuth myFirebaseAuth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
     private Double incomeAll, generalValue;
 
+    private DatabaseReference referenceUserData;
+    private ValueEventListener valueEventListenerReceitas;
+
 
 
 
@@ -49,6 +52,13 @@ public class IncomeActivity extends AppCompatActivity {
 
         txtDate.setText(DateCustom.getDateCurrent());
 
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onStart() {
+        super.onStart();
         recoveryIncomeAll();
     }
 
@@ -115,9 +125,9 @@ public class IncomeActivity extends AppCompatActivity {
     public void recoveryIncomeAll(){
 
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
-        DatabaseReference referenceUserData = myDatabaseReference.child("Users").child( emailId );
+        referenceUserData = myDatabaseReference.child("Users").child( emailId );
 
-        referenceUserData.addValueEventListener(new ValueEventListener() {
+        valueEventListenerReceitas = referenceUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue( User.class );
@@ -137,7 +147,7 @@ public class IncomeActivity extends AppCompatActivity {
     public void updateIncomeFirebase(Double income){
 
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
-        DatabaseReference referenceUserData = myDatabaseReference.child("Users").child( emailId );
+        referenceUserData = myDatabaseReference.child("Users").child( emailId );
         referenceUserData.child("incomeAll").setValue( income );
         Double valueSum = (generalValue + income);
         referenceUserData.child("golAll").setValue( valueSum );
@@ -147,10 +157,8 @@ public class IncomeActivity extends AppCompatActivity {
 
     public void clearFields(){
 
-        txtCategory.setText("");
-        txtDescription.setText("");
-        eTInputUser.setText("");
         Toast.makeText(this, "Receita cadastrado com sucesso!!!", Toast.LENGTH_SHORT).show();
+        finish();
 
     }
 
@@ -160,4 +168,10 @@ public class IncomeActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        referenceUserData.removeEventListener( valueEventListenerReceitas );
+    }
 }

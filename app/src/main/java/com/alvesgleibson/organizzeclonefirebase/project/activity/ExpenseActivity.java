@@ -29,9 +29,10 @@ public class ExpenseActivity extends AppCompatActivity {
 
     private TextInputEditText ettInputUserExpenseDate2, ettInputUserExpenseDescription2, ettInputUserExpenseCategory2;
     private EditText ettInputUserExpenseValue2;
-    private DatabaseReference myDatabaseReference = SettingInstanceFirebase.getInstanceFirebaseDatabase();
+    private DatabaseReference myDatabaseReference = SettingInstanceFirebase.getInstanceFirebaseDatabase(), referenceUserData;
     private FirebaseAuth myFirebaseAuth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
     private Double expenseAll, generalValue;
+    private ValueEventListener valueEventListenerDespesas;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -47,6 +48,13 @@ public class ExpenseActivity extends AppCompatActivity {
 
         ettInputUserExpenseDate2.setText( DateCustom.getDateCurrent() );
 
+        recoveryIncomeAll();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onStart() {
+        super.onStart();
         recoveryIncomeAll();
     }
 
@@ -115,9 +123,9 @@ public class ExpenseActivity extends AppCompatActivity {
     public void recoveryIncomeAll() {
 
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
-        DatabaseReference referenceUserData = myDatabaseReference.child("Users").child(emailId);
+        referenceUserData = myDatabaseReference.child("Users").child(emailId);
 
-        referenceUserData.addValueEventListener(new ValueEventListener() {
+        valueEventListenerDespesas = referenceUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
@@ -137,8 +145,8 @@ public class ExpenseActivity extends AppCompatActivity {
     public void updateExpenseFirebase(Double expense) {
 
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
-        DatabaseReference referenceUserData = myDatabaseReference.child("Users").child(emailId);
-        referenceUserData.child("expenseAll").setValue(-expense);
+        referenceUserData = myDatabaseReference.child("Users").child(emailId);
+        referenceUserData.child("expenseAll").setValue(expense);
         Double valueSum = (generalValue - expense);
         referenceUserData.child("golAll").setValue(valueSum);
 
@@ -148,10 +156,15 @@ public class ExpenseActivity extends AppCompatActivity {
 
     public void clearFields(){
 
-        ettInputUserExpenseCategory2.setText("");
-        ettInputUserExpenseDescription2.setText("");
-        ettInputUserExpenseValue2.setText("");
-        Toast.makeText(this, "Despesa cadastrada com sucesso!!!", Toast.LENGTH_SHORT).show();
 
+        Toast.makeText(this, "Despesa cadastrada com sucesso!!!", Toast.LENGTH_SHORT).show();
+        finish();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        referenceUserData.removeEventListener( valueEventListenerDespesas );
     }
 }
