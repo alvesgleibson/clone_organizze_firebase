@@ -2,10 +2,13 @@ package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,25 +34,28 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static com.alvesgleibson.organizzeclonefirebase.project.helper.Base64Custom.encodeBase64;
+
 
 public class MainLoginActivity extends AppCompatActivity {
+
     private TextView viewText, txtBalance, txtName, txtRenda, txtDespesa;
     private DatabaseReference myDatabaseReference = SettingInstanceFirebase.getInstanceFirebaseDatabase();
     private FirebaseAuth myFirebaseAuth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
     private DatabaseReference referenceUserData;
     private DatabaseReference referenceUserDatass;
+    private DatabaseReference referenceExcluirValor =  myDatabaseReference;
     private ValueEventListener valueEventListenerUser;
     private List<FinancialMovementUser> movimentacaoList = new ArrayList<>();
     private static String monthYearFirebase;
-
+    private int positionAdapter;
+    private Double varDespesa, varRenda, rendaGeral = 0.0, despesaGeral = 0.0, varTemp;
+    private FinancialMovementUser financialMovementUser;
     private ValueEventListener valueEventListenerMovimentacao;
-
-
     private RecyclerView myRecyclerView;
     private AdapterHome adapterHome;
-
-    private Double rendaGeral = 0.0, despesaGeral = 0.0;
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -82,33 +88,110 @@ public class MainLoginActivity extends AppCompatActivity {
         adapterHome = new AdapterHome(movimentacaoList, this);
 
         myRecyclerView.setAdapter( adapterHome);
+        swipe();
 
 
     }
 
+    public void swipe(){
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
 
-        referenceUserData.removeEventListener( valueEventListenerUser );
-        referenceUserDatass.removeEventListener( valueEventListenerMovimentacao );
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlags = ItemTouchHelper.END | ItemTouchHelper.START;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                positionAdapter = viewHolder.getAdapterPosition();
+                financialMovementUser = movimentacaoList.get( positionAdapter );
+
+                deleteItemRecycler();
+
+            }
+        };
+        new ItemTouchHelper(callback).attachToRecyclerView(myRecyclerView);
+
     }
+
+    public void deleteItemRecycler(){
+
+        String msn;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Excluir Transação?");
+        if (financialMovementUser.getType() == "r"|| financialMovementUser.getType().equals("r")){
+            msn = "Deseja Realmente excluir essa Receita? \n\n"+"Categoria: "+financialMovementUser.getCategory()+"\nDescrição: "+financialMovementUser.getDescription();
+
+        }else{
+            msn = "Deseja Realmente excluir essa Despesa? \n\n"+"Categoria: "+financialMovementUser.getCategory()+"\nDescrição: "+financialMovementUser.getDescription();
+
+        }
+        builder.setMessage(msn);
+        builder.setIcon( R.drawable.ic_delete_24);
+        builder.setCancelable(false);
+        builder.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
+
+                referenceExcluirValor.child("Financial Movement").child( emailId ).child(monthYearFirebase).child(financialMovementUser.getIdMovientacao()).removeValue();
+                adapterHome.notifyItemRemoved(positionAdapter );
+
+                updateBalanceAfterDelete();
+                Toast.makeText(MainLoginActivity.this, "Transição Excluida com sucesso", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        builder.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                adapterHome.notifyDataSetChanged();
+                Toast.makeText(MainLoginActivity.this, "Cancelado a exclusão", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.create().show();
+
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onStart() {
-        super.onStart();
-        showInformation();
-        buscarTrasacao();
+    public void updateBalanceAfterDelete(){
+        String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
+        referenceUserData = myDatabaseReference.child("Users").child( emailId );
+
+        if (financialMovementUser.getType() == "r" || financialMovementUser.getType().equals("r")){
+
+            varRenda -= financialMovementUser.getValue();
+            referenceUserData.child("incomeAll").setValue(varRenda);
+
+        }else if (financialMovementUser.getType() == "d" || financialMovementUser.getType().equals("d")){
+            varDespesa -= financialMovementUser.getValue();
+            referenceUserData.child("expenseAll").setValue(varDespesa);
+        }
+
+
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void buscarTrasacao(){
 
-        String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
+        String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
         referenceUserDatass =  myDatabaseReference.child("Financial Movement").child( emailId ).child(monthYearFirebase);
-        Log.i("VerificarHora:", ""+monthYearFirebase);
+
 
         valueEventListenerMovimentacao = referenceUserDatass.addValueEventListener(new ValueEventListener() {
             @Override
@@ -116,24 +199,20 @@ public class MainLoginActivity extends AppCompatActivity {
                 movimentacaoList.clear();
                 for (DataSnapshot snapshot1: snapshot.getChildren()){
                     FinancialMovementUser sa = snapshot1.getValue( FinancialMovementUser.class );
-                    Log.i("Verificar", ""+sa.getCategory());
+                   sa.setIdMovientacao(snapshot1.getKey() );
+
                     movimentacaoList.add( sa );
                 }
                 adapterHome.notifyDataSetChanged();
 
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-
-
     }
-
-
 
 
     @Override
@@ -153,9 +232,6 @@ public class MainLoginActivity extends AppCompatActivity {
                 break;
             }
         }
-
-
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -177,6 +253,8 @@ public class MainLoginActivity extends AppCompatActivity {
         buscarTrasacao();
         viewText.setText(DateCustom.dateShowUser());
     }
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void afterClick(View view){
 
@@ -188,26 +266,31 @@ public class MainLoginActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void showInformation(){
-        String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
+        String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
         referenceUserData = myDatabaseReference.child("Users").child( emailId );
 
        valueEventListenerUser =  referenceUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue( User.class );
-                Double amountAll, varDespesa, varRenda;
-                varDespesa = user.getExpenseAll();
-                varRenda = user.getIncomeAll();
-                amountAll = varRenda - varDespesa;
+                    try {
+                        Double amountAll;
+                        varDespesa = user.getExpenseAll();
+                        varRenda = user.getIncomeAll();
+                        amountAll = varRenda - varDespesa;
+
+                        txtDespesa.setText( String.format("R$ -%.2f", varDespesa.doubleValue()) );
+                        txtRenda.setText(String.format("R$ %.2f", varRenda.doubleValue()) );
+
+                        txtBalance.setText( String.format("R$ %.2f",+amountAll));
+                        txtName.setText( user.getName() );
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
 
-                txtDespesa.setText( String.format("R$ -%.2f", varDespesa.doubleValue()) );
-                txtRenda.setText(String.format("R$ %.2f", varRenda.doubleValue()) );
 
-
-
-                txtBalance.setText( String.format("R$ %.2f",+amountAll));
-                txtName.setText( user.getName() );
             }
 
             @Override
@@ -218,8 +301,20 @@ public class MainLoginActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
 
+        referenceUserData.removeEventListener( valueEventListenerUser );
+        referenceUserDatass.removeEventListener( valueEventListenerMovimentacao );
+    }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showInformation();
+        buscarTrasacao();
+    }
 
 }
