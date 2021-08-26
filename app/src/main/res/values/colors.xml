@@ -27,6 +27,10 @@
     <color name="colorPrimaryFabNormal">#DA4336</color>
     <color name="colorPrimaryFabPressed">#E75043</color>
 
+    <color name="orangeGradiente">#FFB344</color>
+    <color name="pinkGradiente">#FB528B</color>
+    <color name="pinkLigthGradiente">#F899B9</color>
+
 
 
 </resources>

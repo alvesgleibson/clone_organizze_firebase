@@ -160,12 +160,14 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPrincipal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="409dp"
+            android:layout_height="477dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/floatingActionMenu"
@@ -179,16 +181,6 @@
             app:menu_colorNormal="@color/colorPrimaryFabNormal"
             fab:menu_icon="@drawable/fab_add">
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/idExpenses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="addExpenses"
-                android:src="@drawable/ic_fab_remove_24"
-                app:fab_label="@string/expense_name"
-                app:fab_size="mini"
-                fab:fab_colorNormal="@color/colorPrimaryExpense" />
-
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/idIncome"
@@ -197,7 +189,7 @@
                 android:onClick="addIncome"
                 android:src="@drawable/fab_add"
                 app:fab_colorPressed="@color/colorPrimaryIncome"
-                app:fab_label="@string/income_name"
+                app:fab_label="Transações"
                 app:fab_size="mini"
                 fab:fab_colorNormal="@color/colorPrimaryIncome" />
 

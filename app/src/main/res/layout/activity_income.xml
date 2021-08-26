@@ -10,7 +10,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@color/colorPrimaryIncome"
+        android:background="@drawable/background_page_trasation"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp"
@@ -41,13 +41,14 @@
         android:clickable="true"
         android:onClick="saveIncomeMovement"
         android:textAlignment="center"
-        app:backgroundTint="#FFFFFF"
+        app:backgroundTint="@color/colorPrimaryExpense"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
-        app:layout_constraintVertical_bias="0.93"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintVertical_bias="0.167"
         app:srcCompat="@drawable/ic_baseline_done_24" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -103,5 +104,37 @@
             android:layout_height="wrap_content"
             android:hint="@string/description_name" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+        <RadioButton
+            android:id="@+id/radioButtonDespesas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#F63A0B"
+            android:checked="true"
+            android:text="Despesas"
+            android:textColor="#F60404"
+            android:textColorHighlight="#FF0000"
+            android:textColorHint="#F10404"
+            android:textColorLink="#FB0404"
+            android:textSize="24sp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonReceitas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Receitas"
+            android:textSize="24sp" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

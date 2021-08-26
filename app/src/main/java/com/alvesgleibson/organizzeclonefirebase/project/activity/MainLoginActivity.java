@@ -51,7 +51,7 @@ public class MainLoginActivity extends AppCompatActivity {
     private List<FinancialMovementUser> movimentacaoList = new ArrayList<>();
     private static String monthYearFirebase;
     private int positionAdapter;
-    private Double varDespesa, varRenda, rendaGeral = 0.0, despesaGeral = 0.0, varTemp;
+    private Double varRenda = 0.0, rendaGeral = 0.0, despesaGeral = 0.0, varDespesa = 0.0;
     private FinancialMovementUser financialMovementUser;
     private ValueEventListener valueEventListenerMovimentacao;
     private RecyclerView myRecyclerView;
@@ -172,6 +172,7 @@ public class MainLoginActivity extends AppCompatActivity {
         String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
         referenceUserData = myDatabaseReference.child("Users").child( emailId );
 
+
         if (financialMovementUser.getType() == "r" || financialMovementUser.getType().equals("r")){
 
             varRenda -= financialMovementUser.getValue();
@@ -198,10 +199,11 @@ public class MainLoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 movimentacaoList.clear();
                 for (DataSnapshot snapshot1: snapshot.getChildren()){
-                    FinancialMovementUser sa = snapshot1.getValue( FinancialMovementUser.class );
-                   sa.setIdMovientacao(snapshot1.getKey() );
 
-                    movimentacaoList.add( sa );
+                    FinancialMovementUser sass = snapshot1.getValue( FinancialMovementUser.class );
+                   sass.setIdMovientacao(snapshot1.getKey() );
+
+                    movimentacaoList.add( sass );
                 }
                 adapterHome.notifyDataSetChanged();
 
@@ -240,8 +242,9 @@ public class MainLoginActivity extends AppCompatActivity {
         startActivity( new Intent(this, IncomeActivity.class));
 
     }
-    public void addExpenses(View view){
-        startActivity( new Intent(this, ExpenseActivity.class));
+
+    public void addMeta(View view){
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -273,21 +276,17 @@ public class MainLoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue( User.class );
-                    try {
-                        Double amountAll;
-                        varDespesa = user.getExpenseAll();
+
+
                         varRenda = user.getIncomeAll();
-                        amountAll = varRenda - varDespesa;
+                        varDespesa = user.getExpenseAll();
+                        Double amountAll = (varRenda - varDespesa);
 
-                        txtDespesa.setText( String.format("R$ -%.2f", varDespesa.doubleValue()) );
-                        txtRenda.setText(String.format("R$ %.2f", varRenda.doubleValue()) );
+                        txtDespesa.setText( String.format("R$ -%.2f", varDespesa ));
+                        txtRenda.setText(String.format("R$ %.2f", varRenda ));
 
-                        txtBalance.setText( String.format("R$ %.2f",+amountAll));
+                        txtBalance.setText( String.format("R$ %.2f",amountAll));
                         txtName.setText( user.getName() );
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
 
 
 

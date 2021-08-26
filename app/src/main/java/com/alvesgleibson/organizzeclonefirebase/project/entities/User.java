@@ -11,7 +11,6 @@ public class User {
 
     private Double incomeAll = 0.0, expenseAll = 0.0, golAll = 0.0;
 
-
     public User() {
     }
 

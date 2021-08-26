@@ -3,8 +3,11 @@ package com.alvesgleibson.organizzeclonefirebase.project.activity;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,10 +34,13 @@ public class IncomeActivity extends AppCompatActivity {
     private EditText eTInputUser;
     private DatabaseReference myDatabaseReference = SettingInstanceFirebase.getInstanceFirebaseDatabase();
     private FirebaseAuth myFirebaseAuth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
-    private Double incomeAll, generalValue;
+    private Double incomeAll = 0.0, expenseAll = 0.0, generalValue = 0.0, sett = 0.0, updatedIncome = 0.0, par = 0.0;
 
     private DatabaseReference referenceUserData;
     private ValueEventListener valueEventListenerReceitas;
+    private RadioButton incomeRadioB, expenseRadioB;
+    private RadioGroup radioGroupPro;
+    private String st = "", pa ="";
 
 
 
@@ -49,11 +55,16 @@ public class IncomeActivity extends AppCompatActivity {
         txtCategory = findViewById(R.id.tieCategory);
         txtDescription = findViewById(R.id.tieDescription);
         eTInputUser = findViewById(R.id.txtUserIncome);
+        incomeRadioB = findViewById(R.id.radioButtonReceitas);
+        expenseRadioB = findViewById(R.id.radioButtonDespesas);
+        radioGroupPro = findViewById(R.id.radioGroup);
 
         txtDate.setText(DateCustom.getDateCurrent());
 
 
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -72,7 +83,6 @@ public class IncomeActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void validValueField(){
-
         String valueUserInput = eTInputUser.getText().toString();
         String dateUser = txtDate.getText().toString();
         String category = txtCategory.getText().toString();
@@ -82,40 +92,62 @@ public class IncomeActivity extends AppCompatActivity {
             if ( !dateUser.isEmpty()){
                 if ( !category.isEmpty()){
                     if ( !descriptionUser.isEmpty()){
-                        Double par = Double.parseDouble( valueUserInput );
 
-                        FinancialMovementUser movementUser = new FinancialMovementUser( category, dateUser, descriptionUser, "r", par );
-                        Double updatedIncome = par + incomeAll;
+                            par = Double.parseDouble( valueUserInput );
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setCancelable( false );
-                        builder.setTitle("Salvar Receita?");
-                        builder.setMessage("Deseja realmente salvar receita \n\n"+"Valor: R$ "+par+"\nCategoria :"+category+"\nDescrição: " +descriptionUser+"\nCom data: "+dateUser);
-                        builder.setIcon( R.drawable.ic_save_alert_dialog_24);
-                        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                updateIncomeFirebase( updatedIncome );
-                                movementUser.saveMovementIncomeFirebase( );
+                            String title = "", menssage = "";
+                            incomeRadioB.setActivated( true );
 
-                                clearFields();
+                            if (incomeRadioB.isChecked()){
+                                st = "r";
+                                title = "Salvar Receita?";
+                                menssage = "Deseja realmente salvar essa receita \n\n"+"Valor: R$ "+par+"\nCategoria :"+category+"\nDescrição: " +descriptionUser+"\nCom data: "+dateUser;
+                                pa = "Receita cadastrado com sucesso!!!";
+                                sett = incomeAll;
                             }
-                        }).setNegativeButton("Não", null);
-                        builder.create().show();
+                            else if(expenseRadioB.isChecked()){
+                                st = "d";
+                                title = "Salvar Despesa?";
+                                menssage = "Deseja realmente salvar essa Despesa? \n\n"+"Valor: R$ -"+par+"\nCategoria :"+category+"\nDescrição: " +descriptionUser+"\nCom data: "+dateUser;
+                                pa = "Despesa cadastrada com sucesso!!!";
+                                sett = expenseAll;
+                            }
 
+                        Log.i("alvesss", "UpdateIncome:validFields Depois "+ updatedIncome+" par "+par+" sett "+sett);
 
+                            FinancialMovementUser movementUser = new FinancialMovementUser( category, dateUser, descriptionUser, st, par );
+
+                            updatedIncome = par + sett;
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                            builder.setCancelable( false );
+
+                            builder.setTitle( title );
+                            builder.setMessage(menssage);
+                            builder.setIcon( R.drawable.ic_save_alert_dialog_24);
+                            builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    updateIncomeFirebase( updatedIncome );
+                                    movementUser.saveMovementIncomeFirebase( );
+
+                                    clearFields( pa );
+                                }
+                            }).setNegativeButton("Não", null);
+                            builder.create().show();
 
                     }else {
-                        Toast.makeText(this, "Informe valor para Descrição", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Informe Uma Descrição", Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    Toast.makeText(this, "Informe valor para Categoria", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Informe Uma Categoria", Toast.LENGTH_SHORT).show();
                 }
             }else {
-                Toast.makeText(this, "Informe valor para Data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Informe Uma Data", Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(this, "Informe valor R$ para Cadastra", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Informe valor R$ ", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -131,8 +163,16 @@ public class IncomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue( User.class );
-                incomeAll = user.getIncomeAll();
                 generalValue = user.getGolAll();
+
+                if (st == "r" || st.equals("r")) {
+                    incomeAll = user.getIncomeAll();
+
+                }else if (st == "d" || st.equals("d")){
+                    expenseAll = user.getExpenseAll();
+
+                }
+
             }
 
             @Override
@@ -147,26 +187,31 @@ public class IncomeActivity extends AppCompatActivity {
     public void updateIncomeFirebase(Double income){
 
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
+
+        String varFire = "";
+
+        if (st == "r" || st.equals("r")) {
+            varFire = "incomeAll";
+
+        }else if (st == "d" || st.equals("d")){
+            varFire =  "expenseAll";
+
+        }
         referenceUserData = myDatabaseReference.child("Users").child( emailId );
-        referenceUserData.child("incomeAll").setValue( income );
+        referenceUserData.child(varFire).setValue( income );
         Double valueSum = (generalValue + income);
         referenceUserData.child("golAll").setValue( valueSum );
 
 
     }
 
-    public void clearFields(){
+    public void clearFields( String pa){
 
-        Toast.makeText(this, "Receita cadastrado com sucesso!!!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, pa, Toast.LENGTH_SHORT).show();
         finish();
 
     }
 
-    public void Alert(){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-    }
 
 
     @Override

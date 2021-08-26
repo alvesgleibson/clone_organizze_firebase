@@ -17,13 +17,8 @@ public class FinancialMovementUser {
     private String category, date, description,type,idMovientacao;
     private Double inputValueUser;
 
-    
-
-
-    public FinancialMovementUser(){
-
+    public FinancialMovementUser() {
     }
-
 
     public FinancialMovementUser(String category, String date, String description, String type, Double inputValueUser) {
         this.category = category;
