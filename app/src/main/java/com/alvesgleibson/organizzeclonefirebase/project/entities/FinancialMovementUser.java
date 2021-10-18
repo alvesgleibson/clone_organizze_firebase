@@ -1,8 +1,5 @@
 package com.alvesgleibson.organizzeclonefirebase.project.entities;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.alvesgleibson.organizzeclonefirebase.project.helper.Base64Custom;
 import com.alvesgleibson.organizzeclonefirebase.project.helper.DateCustom;
@@ -10,7 +7,6 @@ import com.alvesgleibson.organizzeclonefirebase.project.setting.SettingInstanceF
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.Date;
 
 public class FinancialMovementUser {
 
@@ -28,7 +24,6 @@ public class FinancialMovementUser {
         this.inputValueUser = inputValueUser;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveMovementIncomeFirebase(){
         DatabaseReference reference = SettingInstanceFirebase.getInstanceFirebaseDatabase();
         FirebaseAuth auth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
@@ -86,6 +81,14 @@ public class FinancialMovementUser {
     }
 
     public void setValue(Double inputValueUser) {
+        this.inputValueUser = inputValueUser;
+    }
+
+    public Double getInputValueUser() {
+        return inputValueUser;
+    }
+
+    public void setInputValueUser(Double inputValueUser) {
         this.inputValueUser = inputValueUser;
     }
 }

@@ -1,7 +1,6 @@
 package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,7 +43,7 @@ public class IncomeActivity extends AppCompatActivity {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,14 +64,12 @@ public class IncomeActivity extends AppCompatActivity {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
         recoveryIncomeAll();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveIncomeMovement(View view){
 
         validValueField();
@@ -81,7 +77,6 @@ public class IncomeActivity extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void validValueField(){
         String valueUserInput = eTInputUser.getText().toString();
         String dateUser = txtDate.getText().toString();
@@ -153,7 +148,6 @@ public class IncomeActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void recoveryIncomeAll(){
 
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
@@ -183,7 +177,6 @@ public class IncomeActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void updateIncomeFirebase(Double income){
 
         String emailId = Base64Custom.encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());

@@ -1,6 +1,5 @@
 package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,7 +7,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alvesgleibson.organizzeclonefirebase.R;
@@ -64,7 +62,7 @@ public class ResgisterNewUserActivity extends AppCompatActivity {
         public void createUserMed() {
             auth = SettingInstanceFirebase.getInstanceFirebaseAuthMethod();
             auth.createUserWithEmailAndPassword(myUserClass.getEmail(), myUserClass.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
+
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 

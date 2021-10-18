@@ -1,7 +1,6 @@
 package com.alvesgleibson.organizzeclonefirebase.project.activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -10,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +20,6 @@ import com.alvesgleibson.organizzeclonefirebase.R;
 import com.alvesgleibson.organizzeclonefirebase.project.adapter.AdapterHome;
 import com.alvesgleibson.organizzeclonefirebase.project.entities.FinancialMovementUser;
 import com.alvesgleibson.organizzeclonefirebase.project.entities.User;
-import com.alvesgleibson.organizzeclonefirebase.project.helper.Base64Custom;
 import com.alvesgleibson.organizzeclonefirebase.project.helper.DateCustom;
 import com.alvesgleibson.organizzeclonefirebase.project.setting.SettingInstanceFirebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.alvesgleibson.organizzeclonefirebase.project.helper.Base64Custom.encodeBase64;
 
@@ -57,7 +52,6 @@ public class MainLoginActivity extends AppCompatActivity {
     private RecyclerView myRecyclerView;
     private AdapterHome adapterHome;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,7 +133,7 @@ public class MainLoginActivity extends AppCompatActivity {
         builder.setIcon( R.drawable.ic_delete_24);
         builder.setCancelable(false);
         builder.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
+
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -167,7 +161,7 @@ public class MainLoginActivity extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public void updateBalanceAfterDelete(){
         String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
         referenceUserData = myDatabaseReference.child("Users").child( emailId );
@@ -187,7 +181,6 @@ public class MainLoginActivity extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void buscarTrasacao(){
 
         String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
@@ -247,7 +240,7 @@ public class MainLoginActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public void beforeClick(View view){
 
 
@@ -255,40 +248,33 @@ public class MainLoginActivity extends AppCompatActivity {
         referenceUserDatass.removeEventListener( valueEventListenerMovimentacao );
         buscarTrasacao();
         viewText.setText(DateCustom.dateShowUser());
+        showInformation();
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public void afterClick(View view){
 
         monthYearFirebase = DateCustom.dateFirebase(1);
         referenceUserDatass.removeEventListener( valueEventListenerMovimentacao );
         buscarTrasacao();
         viewText.setText(DateCustom.dateShowUser());
+        showInformation();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public void showInformation(){
         String emailId = encodeBase64(myFirebaseAuth.getCurrentUser().getEmail());
         referenceUserData = myDatabaseReference.child("Users").child( emailId );
+
+        DatabaseReference reference = myDatabaseReference.child("Financial Movement").child(emailId).child(monthYearFirebase);
 
        valueEventListenerUser =  referenceUserData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue( User.class );
 
-
-                        varRenda = user.getIncomeAll();
-                        varDespesa = user.getExpenseAll();
-                        Double amountAll = (varRenda - varDespesa);
-
-                        txtDespesa.setText( String.format("R$ -%.2f", varDespesa ));
-                        txtRenda.setText(String.format("R$ %.2f", varRenda ));
-
-                        txtBalance.setText( String.format("R$ %.2f",amountAll));
                         txtName.setText( user.getName() );
-
-
 
             }
 
@@ -297,6 +283,40 @@ public class MainLoginActivity extends AppCompatActivity {
 
             }
         });
+
+        ValueEventListener meses = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Double amountAll =0.0, varDespesa =0.0, varRenda =0.0;
+                for (DataSnapshot movimento: snapshot.getChildren()){
+                    FinancialMovementUser user = movimento.getValue( FinancialMovementUser.class );
+
+                    switch (user.getType()){
+                        case "r":
+                            varRenda = user.getInputValueUser();
+                            amountAll += varRenda;
+                            break;
+                        case "d":
+                            varDespesa += user.getInputValueUser();
+                            amountAll -= varDespesa;
+                            break;
+                    }
+
+                }
+
+                txtDespesa.setText( String.format("R$ -%.2f", varDespesa) );
+                txtRenda.setText(String.format("R$ %.2f", varRenda) );
+                txtBalance.setText( String.format("R$ %.2f",+amountAll));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
 
@@ -308,7 +328,7 @@ public class MainLoginActivity extends AppCompatActivity {
         referenceUserDatass.removeEventListener( valueEventListenerMovimentacao );
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     protected void onStart() {
         super.onStart();

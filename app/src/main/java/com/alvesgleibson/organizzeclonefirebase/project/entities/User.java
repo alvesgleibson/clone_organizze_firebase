@@ -3,7 +3,6 @@ package com.alvesgleibson.organizzeclonefirebase.project.entities;
 import com.alvesgleibson.organizzeclonefirebase.project.setting.SettingInstanceFirebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class User {
 
