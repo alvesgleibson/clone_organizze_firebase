@@ -2,23 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:title="ss"
-        android:id="@+id/ptBrazil"
-        android:icon="@drawable/brasil"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
 
-
-        />
-    <item
-        android:title="ss"
-        android:id="@+id/engUSA"
-        android:icon="@drawable/states"
-        android:orderInCategory="200"
-        app:showAsAction="ifRoom"
-
-        />
     <item
         android:title="Sair"
         android:id="@+id/logoffB"

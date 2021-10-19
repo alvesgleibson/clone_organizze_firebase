@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.alvesgleibson.organizzeclonefirebase.project.helper.Base64Custom.encodeBase64;
 
@@ -56,6 +57,7 @@ public class MainLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
+
 
         viewText = findViewById(R.id.txtDataExibir);
         txtName = findViewById(R.id.txtNameUser);

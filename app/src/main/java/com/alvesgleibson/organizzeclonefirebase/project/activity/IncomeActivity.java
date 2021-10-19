@@ -26,6 +26,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class IncomeActivity extends AppCompatActivity {
 
     private TextInputEditText txtDate, txtDescription, txtCategory;
@@ -87,7 +92,7 @@ public class IncomeActivity extends AppCompatActivity {
             if ( !dateUser.isEmpty()){
                 if ( !category.isEmpty()){
                     if ( !descriptionUser.isEmpty()){
-
+                            Locale.setDefault(new Locale("pt", "Brazil"));
                             par = Double.parseDouble( valueUserInput );
 
                             String title = "", menssage = "";
